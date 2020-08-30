@@ -18,7 +18,7 @@ impl PollHandle {
 
     pub fn schedule_read_rawfd(&self, fd: RawFd, token: Token) {
         let mut event = EpollEvent::new(
-            EpollFlags::EPOLLIN | EpollFlags::EPOLLET | EpollFlags::EPOLLONESHOT,
+            EPOLLIN | EPOLLET | EPOLLONESHOT,
             token,
         );
         epoll_ctl(self.epoll_fd, EpollOp::EpollCtlMod, fd, &mut event).unwrap();
@@ -30,7 +30,7 @@ impl PollHandle {
 
     pub fn schedule_write_rawfd(&self, fd: RawFd, token: Token) {
         let mut event = EpollEvent::new(
-            EpollFlags::EPOLLOUT | EpollFlags::EPOLLET | EpollFlags::EPOLLONESHOT,
+            EPOLLOUT | EPOLLET | EPOLLONESHOT,
             token,
         );
         epoll_ctl(self.epoll_fd, EpollOp::EpollCtlMod, fd, &mut event).unwrap();
@@ -42,7 +42,7 @@ impl PollHandle {
     }
 
     pub fn new_io_fd(&self, fd: RawFd, token: Token) {
-        let mut event = EpollEvent::new(EpollFlags::EPOLLET | EpollFlags::EPOLLONESHOT, token);
+        let mut event = EpollEvent::new(EPOLLET | EPOLLONESHOT, token);
         epoll_ctl(self.epoll_fd, EpollOp::EpollCtlAdd, fd, &mut event).unwrap();
     }
 }
@@ -77,13 +77,13 @@ impl PollScheduler {
     #[inline]
     fn epoll_kind_to_available(&self, kind: &EpollFlags) -> Available {
         let mut available = NONE;
-        if kind.contains(EpollFlags::EPOLLIN) {
+        if kind.contains(EPOLLIN) {
             available |= READ
         };
-        if kind.contains(EpollFlags::EPOLLOUT) {
+        if kind.contains(EPOLLOUT) {
             available |= WRITE
         };
-        if kind.contains(EpollFlags::EPOLLHUP) || kind.contains(EpollFlags::EPOLLERR) {
+        if kind.contains(EPOLLHUP) || kind.contains(EPOLLERR) {
             available |= HUP
         };
         available

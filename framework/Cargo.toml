@@ -9,25 +9,29 @@ doctest = false
 
 [dependencies]
 libc = ">= 0.2.4"
-time = ">=0.1.0"
+time = "=0.1.36"
 getopts = "*"
 byteorder = "*"
 clippy = { version = "*", optional = true }
 fnv = "*"
-twox-hash = "*"
-regex = "*"
-lazy_static = "*"
+twox-hash = "=1.0.0"
+regex = "=0.1.80"
+lazy_static = "=0.2.8"
 net2 = "*"
+cfg-if = "=0.1.0"
 # NIX restricts us to just unix for now, we can fix this if someone cares at a later point.
-nix = "*"
+nix = "=0.8.0"
 # Figure out if we want this permanently or just for now.
 rust-sctp = { git="https://github.com/netsys/rust-sctp", optional = true}
 toml = "*"
 # Hack for SHM
 uuid= { version = "*", features=["v4"] }
-error-chain = "*"
-tokio-core=">=0.1.8"
-futures=">=0.1.14"
+backtrace = "=0.3.2"
+error-chain = "=0.8.0"
+tokio-core="=0.1.8"
+futures="=0.1.14"
+rand = "=0.3.15"
+unicode-segmentation = "=1.0.3"
 
 [features]
 default = []
@@ -38,4 +42,7 @@ sctp = ["rust-sctp"]
 
 [build-dependencies]
 # Use Bindgen to generate DPDK structures.
-bindgen = ">=0.30.0"
+libloading = "=0.3.1"
+phf = "=0.7.21"
+gcc = "=0.3.41"
+bindgen = "=0.31.0"

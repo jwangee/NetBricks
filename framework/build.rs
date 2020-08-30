@@ -80,9 +80,11 @@ fn main() {
     println!("Header path {:?}", header_path.to_str());
     let bindings = bindgen::Builder::default()
         .header(header_path.to_str().unwrap())
-        .rust_target(bindgen::RustTarget::Nightly)
+        // .rust_target(bindgen::RustTarget::Nightly)
         .clang_args(vec!["-I", dpdk_include_path.to_str().unwrap()].iter())
         .blacklist_type("max_align_t") // https://github.com/servo/rust-bindgen/issues/550
+        .blacklist_type("DirectoryHeader")
+        .rustfmt_bindings(false)
         .generate()
         .expect("Unable to generate DPDK bindings");
     let out_dir = env::var("OUT_DIR").unwrap();

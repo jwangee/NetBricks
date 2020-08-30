@@ -24,6 +24,11 @@ rustup install nightly
 rustup default nightly
 ```
 
+This repository was tested using rust 2019-01-18, to use this version do:
+```
+rustup default nightly-2019-01-19
+```
+
 Then clone this repository and run `build.sh`
 
 ```
