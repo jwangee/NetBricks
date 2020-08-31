@@ -46,11 +46,15 @@ pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<A
         })
         .parse::<IpHeader>()
         .filter(box move |p| {
-            let flow = p.get_header().flow().unwrap();
+            let flow = p.get_header().flow();
             for acl in &acls {
-                if acl.matches(&flow, &flow_cache) {
+                if flow.is_none() {
+                    return true;
+                }
+                let f = flow.unwrap();
+                if acl.matches(&f, &flow_cache) {
                     if !acl.drop {
-                        flow_cache.insert(flow);
+                        flow_cache.insert(f);
                     }
                     return !acl.drop;
                 }
