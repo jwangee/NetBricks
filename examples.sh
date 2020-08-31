@@ -15,6 +15,7 @@ export examples=(
         test/reset-parse
         test/tcp_reconstruction
         test/acl-fw
+        test/dpi
         test/packet_generation
         test/packet_test
         test/embedded-scheduler-test
