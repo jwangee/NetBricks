@@ -14,11 +14,11 @@ use e2d2::scheduler::*;
 use e2d2::utils::Ipv4Prefix;
 use std::env;
 use std::sync::Arc;
-use std::thread;
-use std::time::Duration;
+//use std::thread;
+//use std::time::Duration;
 mod nf;
 
-const CONVERSION_FACTOR: f64 = 1000000000.;
+//const CONVERSION_FACTOR: f64 = 1000000000.;
 
 fn test<S: Scheduler + Sized>(ports: Vec<CacheAligned<PortQueue>>, sched: &mut S) {
     for port in &ports {
@@ -29,7 +29,7 @@ fn test<S: Scheduler + Sized>(ports: Vec<CacheAligned<PortQueue>>, sched: &mut S
             port.txq()
         );
     }
-    # TODO: add rules
+    // TODO: add rules
     let acls = vec![
         Acl {
             src_ip: Some(Ipv4Prefix::new(0, 0)),
