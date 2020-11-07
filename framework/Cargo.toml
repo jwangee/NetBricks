@@ -18,7 +18,7 @@ twox-hash = "=1.0.0"
 regex = "=0.1.80"
 lazy_static = "=0.2.8"
 net2 = "*"
-cfg-if = "=0.1.0"
+cfg-if = "=0.1.2"
 # NIX restricts us to just unix for now, we can fix this if someone cares at a later point.
 nix = "=0.8.0"
 # Figure out if we want this permanently or just for now.
