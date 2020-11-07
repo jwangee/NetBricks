@@ -1,5 +1,5 @@
 [package]
-name = "vlanpop-lpm"
+name = "vlanpop-acl"
 version = "0.1.0"
 authors = ["Tamas Levai <levait@tmit.bme.hu>"]
 
@@ -9,6 +9,7 @@ time = "=0.1.36"
 getopts = "*"
 rand = "0.3.15"
 fnv = "*"
+twox-hash = "*"
 
 [features]
 default = []

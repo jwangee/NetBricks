@@ -58,7 +58,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "clean", type: "shell", privileged: false, inline: <<-SHELL
     sudo apt -y clean
-    sudo apt -y update
+    sudo apt update
   SHELL
 
 end
