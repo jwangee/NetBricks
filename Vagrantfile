@@ -47,7 +47,7 @@ Vagrant.configure("2") do |config|
     curl https://sh.rustup.rs -sSf > /tmp/rustup.sh
     sh /tmp/rustup.sh -y --default-toolchain nightly-2019-01-19
     rm /tmp/rustup.sh
-    echo "source $HOME/.cargo/env" > $HOME/.bashrc
+    echo "source $HOME/.cargo/env" >> $HOME/.bashrc
   SHELL
 
   config.vm.provision "hugepages", type: "shell", privileged: false, inline: <<-SHELL
@@ -57,7 +57,7 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "clean", type: "shell", privileged: false, inline: <<-SHELL
-    sudo apt -y clean
+    sudo apt clean
     sudo apt update
   SHELL
 
