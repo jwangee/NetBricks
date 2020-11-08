@@ -37,8 +37,30 @@ impl Acl {
     }
 }
 
+#[inline]
+fn lat() {
+    unsafe {
+        asm!("nop"
+             :
+             :
+             :
+             : "volatile");
+    }
+}
+
+#[inline]
+fn delay_loop(delay: u64) {
+    let mut d = 0;
+    while d < delay {
+        lat();
+        d += 1;
+    }
+}
+
 pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<Acl>) -> CompositionBatch {
     let mut flow_cache = HashSet::<Flow, FnvHash>::with_hasher(Default::default());
+    // take delay for URLFilter from controller/profile.go
+    let url_filter_delay: u64 = 6900;
     parent
         .parse::<MacHeader>()
         .transform(box move |p| {
@@ -46,6 +68,7 @@ pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<A
         })
         .parse::<IpHeader>()
         .filter(box move |p| {
+	    delay_loop(url_filter_delay);
             let flow = p.get_header().flow();
             for acl in &acls {
                 if flow.is_none() {
