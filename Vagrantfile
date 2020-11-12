@@ -4,17 +4,27 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-18.04"
 
+  config.vm.hostname = "NetBricksVM"
+
   config.vm.synced_folder ".", "/NetBricks"
 
+  config.vm.network "private_network", ip: "192.168.51.3",
+               virtualbox__intnet: "ingress", adapter: 2
+
   config.vm.provider "virtualbox" do |vb|
+    vb.name = "NetBricksVM"
     vb.gui = false
     vb.memory = "4096"
     vb.cpus = "1"
+    vb.customize ["modifyvm", :id, "--nic1", "nat"]
+    vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
+    vb.customize ["modifyvm", :id, "--nictype2", "virtio"]
+    vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
   end
 
   config.vm.provision "deps", type: "shell", privileged: false, inline: <<-SHELL
-    sudo apt update
-    sudo apt install -y \
+    sudo apt-get update
+    sudo apt-get install -y \
          libgnutls30 \
          libgnutls-openssl-dev \
          libcurl4-gnutls-dev \
@@ -27,7 +37,7 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "docker", type: "shell", privileged: false, inline: <<-SHELL
-    sudo apt remove -y docker docker-engine docker.io containerd runc
+    sudo apt-get remove -y docker docker-engine docker.io containerd runc
     sudo apt-get install -y \
          apt-transport-https \
          ca-certificates \
@@ -39,8 +49,8 @@ Vagrant.configure("2") do |config|
          "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
          $(lsb_release -cs) \
          stable"
-    sudo apt update
-    sudo apt install -y docker-ce docker-ce-cli containerd.io
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io
   SHELL
 
   config.vm.provision "rust", type: "shell", privileged: false, inline: <<-SHELL
@@ -57,8 +67,8 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "clean", type: "shell", privileged: false, inline: <<-SHELL
-    sudo apt clean
-    sudo apt update
+    sudo apt-get clean
+    sudo apt-get update
   SHELL
 
 end
