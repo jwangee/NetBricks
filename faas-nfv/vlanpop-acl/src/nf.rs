@@ -46,7 +46,8 @@ pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<A
             match hdr.etype() {
                 0x8100 | 0x9100 => hdr.set_etype(0x8000),
                 _ => (),
-            }
+            };
+	    hdr.swap_addresses();
         })
         .parse::<IpHeader>()
         .filter(box move |p| {
