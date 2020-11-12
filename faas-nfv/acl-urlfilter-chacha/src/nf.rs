@@ -72,24 +72,23 @@ pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<A
             let flow = p.get_header().flow();
             for acl in &acls {
                 if flow.is_none() {
-		    // further processing
-		    delay_loop(url_filter_delay);
-		    delay_loop(chacha_delay);
                     return true;
                 }
                 let f = flow.unwrap();
                 if acl.matches(&f, &flow_cache) {
                     if !acl.drop {
                         flow_cache.insert(f);
-			// further processing
-			delay_loop(url_filter_delay);
-			delay_loop(chacha_delay);
                     }
                     return !acl.drop;
                 }
             }
 	    // drop packet
             return false;
+        })
+	.parse::<TcpHeader>()
+        .transform(box move |_p| {
+	    delay_loop(url_filter_delay);
+	    delay_loop(chacha_delay);
         })
         .compose()
 }
