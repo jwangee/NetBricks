@@ -1,3 +1,60 @@
+Container Building Process
+--------
+
+## 1) Create a build environment
+You can either setup a builder VM using Vagrant and Virtualbox (1a) or setup your host (1b) to build NetBricks .
+
+### 1a) Use builder VM
+This requires Vagrant and Virtualbox to be installed. You can build Netbricks with the following commands:
+```sh
+vagrant up
+vagrant ssh
+$ cd /NetBricks
+$ make
+```
+### 1b) Install dependencies
+
+#### Install Package Dependencies
+```sh
+sudo apt-get install -y libgnutls30 libgnutls-openssl-dev libcurl4-gnutls-dev libnuma-dev \
+libpcap-dev libsctp-dev linux-headers-generic build-essential clang
+```
+
+#### Install Rust
+``` sh
+curl https://sh.rustup.rs -sSf > /tmp/rustup.sh
+sh /tmp/rustup.sh -y --default-toolchain nightly-2019-01-19
+rm /tmp/rustup.sh
+echo "source $HOME/.cargo/env" >> $HOME/.bashrc
+```
+
+### 2) Create container
+Requires Docker to be installed.
+```sh
+make docker
+```
+
+### 2) Run NFs in container
+
+Start container with `./run_nf.sh`.
+
+In the container you can start NF chains by issuing:
+```sh
+/app/man run <chain> -c 0 -p <nic_pcie_addr>
+```
+
+Supported NF chains are:
+
+* [vlanpop-acl](faas-nfv/vlanpop-acl)
+
+* [acl-urlfilter-chacha](faas-nfv/acl-urlfilter-chacha)
+
+* [acl-distribnat](faas-nfv/acl-distribnat)
+
+
+--------
+# UPSTREAM README:
+
 [NetBricks](http://netbricks.io/) is a Rust based framework for NFV development. Please refer to the
 [paper](https://people.eecs.berkeley.edu/~apanda/assets/papers/osdi16.pdf) for information
 about the architecture and design. Currently NetBricks requires a relatively modern Linux version.
