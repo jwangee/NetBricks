@@ -60,7 +60,7 @@ fn test<S: Scheduler + Sized>(ports: Vec<CacheAligned<PortQueue>>, sched: &mut S
 
     let pipelines: Vec<_> = ports
         .iter()
-        .map(|port| acl_match(ReceiveBatch::new(port.clone()), acls.clone()).send(port.clone()))
+        .map(|port| acl_nat(ReceiveBatch::new(port.clone()), acls.clone()).send(port.clone()))
         .collect();
     println!("Running {} pipelines", pipelines.len());
     for pipeline in pipelines {
@@ -81,7 +81,7 @@ fn main() {
     let mut config = initialize_system(&configuration).unwrap();
     config.start_schedulers();
 
-    config.add_pipeline_to_run(Arc::new(move |p, s: &mut StandaloneScheduler| test(p, s)));  // FIXME: in/out ports?
+    config.add_pipeline_to_run(Arc::new(move |p, s: &mut StandaloneScheduler| test(p, s)));
     config.execute();
 
     let mut pkts_so_far = (0, 0);
