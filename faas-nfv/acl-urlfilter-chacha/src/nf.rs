@@ -57,11 +57,21 @@ fn delay_loop(delay: u64) {
     }
 }
 
+pub fn urlfilter<T: 'static + Batch<Header = NullHeader>>(parent: T, delay: u64) -> CompositionBatch {
+    parent.transform(box move |_p| {
+	delay_loop(delay);
+    }).compose()
+}
+
+pub fn chacha<T: 'static + Batch<Header = NullHeader>>(parent: T, delay: u64) -> CompositionBatch {
+    parent.parse::<MacHeader>().transform(box move |_p| {
+	delay_loop(delay);
+    }).compose()
+}
+
+
 pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<Acl>) -> CompositionBatch {
     let mut flow_cache = HashSet::<Flow, FnvHash>::with_hasher(Default::default());
-    // take delay for URLFilter from controller/profile.go
-    let url_filter_delay: u64 = 6900;
-    let chacha_delay: u64 = 6800;
     parent
         .parse::<MacHeader>()
         .transform(box move |p| {
@@ -85,10 +95,15 @@ pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<A
 	    // drop packet
             return false;
         })
-	.parse::<TcpHeader>()
-        .transform(box move |_p| {
-	    delay_loop(url_filter_delay);
-	    delay_loop(chacha_delay);
-        })
         .compose()
+}
+
+pub fn acl_urlfilter_chacha<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<Acl>) -> CompositionBatch {
+    // take delay for URLFilter from controller/profile.go
+    let urlfilter_delay: u64 = 6900;
+    let chacha_delay: u64 = 6800;
+    let mut pipeline = acl_match(parent, acls);
+    pipeline = urlfilter(pipeline, urlfilter_delay);
+    pipeline = chacha(pipeline, chacha_delay);
+    pipeline.compose()
 }

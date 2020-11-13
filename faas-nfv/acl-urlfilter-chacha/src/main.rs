@@ -60,7 +60,7 @@ fn test<S: Scheduler + Sized>(ports: Vec<CacheAligned<PortQueue>>, sched: &mut S
 
     let pipelines: Vec<_> = ports
         .iter()
-        .map(|port| acl_match(ReceiveBatch::new(port.clone()), acls.clone()).send(port.clone()))
+        .map(|port| acl_urlfilter_chacha(ReceiveBatch::new(port.clone()), acls.clone()).send(port.clone()))
         .collect();
     println!("Running {} pipelines", pipelines.len());
     for pipeline in pipelines {
