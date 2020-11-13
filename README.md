@@ -2,7 +2,7 @@ Container Building Process
 --------
 
 ## 1) Create a build environment
-You can either setup a builder VM using Vagrant and Virtualbox (1a) or setup your host (1b) to build NetBricks .
+You can either setup a builder VM using Vagrant and Virtualbox (1a) or setup your host (1b) to build NetBricks.
 
 ### 1a) Use builder VM
 This requires Vagrant and Virtualbox to be installed. You can build Netbricks with the following commands:
@@ -40,15 +40,13 @@ Start container with `./run_nf.sh`.
 
 In the container you can start NF chains by issuing:
 ```sh
-/app/man run <chain> -c 0 -p <nic_pcie_addr>
+/app/main run <chain> -c 0 -p <nic_pcie_addr>
 ```
 
 Supported NF chains are:
 
 * [vlanpop-acl](faas-nfv/vlanpop-acl)
-
 * [acl-urlfilter-chacha](faas-nfv/acl-urlfilter-chacha)
-
 * [acl-distribnat](faas-nfv/acl-distribnat)
 
 
@@ -132,7 +130,7 @@ Container Build
 You must have [Docker](https://www.docker.com/) installed. Once this is done, just run
 
 ```
-./build.sh build_container 
+./build.sh build_container
 ```
 
 This will build and copy the binaries over to the `target` subdirectory. As noted above, you can run it if you have a
