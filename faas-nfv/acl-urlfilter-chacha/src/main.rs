@@ -5,6 +5,7 @@ extern crate fnv;
 extern crate getopts;
 extern crate rand;
 extern crate time;
+extern crate chacha;
 use self::nf::*;
 use e2d2::allocators::CacheAligned;
 use e2d2::config::*;

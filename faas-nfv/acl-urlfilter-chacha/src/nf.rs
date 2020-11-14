@@ -4,6 +4,7 @@ use e2d2::utils::{Flow, Ipv4Prefix};
 use fnv::FnvHasher;
 use std::collections::HashSet;
 use std::hash::BuildHasherDefault;
+use chacha::{ChaCha, KeyStream};
 
 type FnvHash = BuildHasherDefault<FnvHasher>;
 
@@ -63,9 +64,23 @@ pub fn urlfilter<T: 'static + Batch<Header = NullHeader>>(parent: T, delay: u64)
     }).compose()
 }
 
-pub fn chacha<T: 'static + Batch<Header = NullHeader>>(parent: T, delay: u64) -> CompositionBatch {
-    parent.parse::<MacHeader>().transform(box move |_p| {
-	delay_loop(delay);
+const CHACHA_SECRET_KEY: [u8; 32] = [0u8; 32];
+const CHACHA_NONCE: [u8; 8] = [0u8; 8];
+// add a 20-byte offset to keep timestamp in TCP payload intact
+const CHACHA_OFFSET: usize = 20;
+
+pub fn chacha<T: 'static + Batch<Header = NullHeader>>(parent: T) -> CompositionBatch {
+    let mut stream = ChaCha::new_chacha20(&CHACHA_SECRET_KEY, &CHACHA_NONCE);
+    parent
+	.parse::<MacHeader>()
+	.parse::<IpHeader>()
+	.parse::<TcpHeader>()
+	.transform(box move |p| {
+	    let payload = p.get_mut_payload();
+	    if payload.len() > CHACHA_OFFSET {
+		stream.xor_read(&mut payload[CHACHA_OFFSET..])
+		    .expect("hit end of stream far too soon");
+	    }
     }).compose()
 }
 
@@ -101,9 +116,8 @@ pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<A
 pub fn acl_urlfilter_chacha<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<Acl>) -> CompositionBatch {
     // take delay for URLFilter from controller/profile.go
     let urlfilter_delay: u64 = 6900;
-    let chacha_delay: u64 = 6800;
     let mut pipeline = acl_match(parent, acls);
     pipeline = urlfilter(pipeline, urlfilter_delay);
-    pipeline = chacha(pipeline, chacha_delay);
+    pipeline = chacha(pipeline);
     pipeline.compose()
 }
