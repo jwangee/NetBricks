@@ -4,4 +4,4 @@ sudo docker run -it --pid=host --rm --privileged --cpuset-cpus="0-1" \
     -v /mnt/huge:/mnt/huge -v /dev:/dev \
     -v /sys/devices/system/node:/sys/devices/system/node \
     -v /var/run:/var/run -v /tmp/sn_vports:/tmp/sn_vports \
-    ch8728847/netbricks:test bash
+    levaitamas/netbricks bash

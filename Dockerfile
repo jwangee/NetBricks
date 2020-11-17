@@ -1,5 +1,5 @@
 FROM ch8728847/nf:base
-MAINTAINER "Jianfeng Wang <pkueewjf@gmail.com>"
+MAINTAINER "Tamas Levai <levait@tmit.bme.hu>"
 
 RUN apt-get -yq update && apt-get -yq install \
     iputils-ping \
