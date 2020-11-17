@@ -29,6 +29,25 @@ struct FlowUsed {
     pub used: bool,
 }
 
+// https://docs.rs/redis/0.8.0/redis/index.html
+// https://github.com/jwangee/FaaS-Flow/blob/master/network_functions/test_dpdk/nf_container/modules/distributed_nat.cc
+
+// fn upload_rule() {
+
+// }
+
+// fn remove_rule() {
+
+// }
+
+// fn fetch_rule() {
+
+// }
+
+// fn rules_sync_global() {
+
+// }
+
 impl Acl {
     pub fn matches(&self, flow: &Flow, connections: &HashSet<Flow, FnvHash>) -> bool {
         if (self.src_ip.is_none() || self.src_ip.unwrap().in_range(flow.src_ip))
@@ -45,26 +64,6 @@ impl Acl {
         } else {
             false
         }
-    }
-}
-
-#[inline]
-fn lat() {
-    unsafe {
-        asm!("nop"
-             :
-             :
-             :
-             : "volatile");
-    }
-}
-
-#[inline]
-fn delay_loop(delay: u64) {
-    let mut d = 0;
-    while d < delay {
-        lat();
-        d += 1;
     }
 }
 
@@ -106,37 +105,39 @@ pub fn nat<T: 'static + Batch<Header = NullHeader>>(
     let mut next_port = 1024;
     const MIN_PORT: u16 = 1024;
     const MAX_PORT: u16 = 65535;
-    let pipeline = parent.parse::<MacHeader>().transform(box move |pkt| {
-        // let hdr = pkt.get_mut_header();
-        let payload = pkt.get_mut_payload();
-        if let Some(flow) = ipv4_extract_flow(payload) {
-            let found = match port_hash.get(&flow) {
-                Some(s) => {
-                    s.ipv4_stamp_flow(payload);
-                    true
-                }
-                None => false,
-            };
-            if !found {
-                if next_port < MAX_PORT {
-                    let assigned_port = next_port; //FIXME.
-                    next_port += 1;
-                    flow_vec[assigned_port as usize].flow = flow;
-                    flow_vec[assigned_port as usize].used = true;
-                    let mut outgoing_flow = flow.clone();
-                    outgoing_flow.src_ip = ip;
-                    outgoing_flow.src_port = assigned_port;
-                    let rev_flow = outgoing_flow.reverse_flow();
+    parent
+	.parse::<MacHeader>()
+	.transform(box move |pkt| {
+            // let hdr = pkt.get_mut_header();
+            let payload = pkt.get_mut_payload();
+            if let Some(flow) = ipv4_extract_flow(payload) {
+		let found = match port_hash.get(&flow) {
+                    Some(s) => {
+			s.ipv4_stamp_flow(payload);
+			true
+                    }
+                    None => false,
+		};
+		if !found {
+                    if next_port < MAX_PORT {
+			let assigned_port = next_port; //FIXME.
+			next_port += 1;
+			flow_vec[assigned_port as usize].flow = flow;
+			flow_vec[assigned_port as usize].used = true;
+			let mut outgoing_flow = flow.clone();
+			outgoing_flow.src_ip = ip;
+			outgoing_flow.src_port = assigned_port;
+			let rev_flow = outgoing_flow.reverse_flow();
 
-                    port_hash.insert(flow, outgoing_flow);
-                    port_hash.insert(rev_flow, flow.reverse_flow());
+			port_hash.insert(flow, outgoing_flow);
+			port_hash.insert(rev_flow, flow.reverse_flow());
 
-                    outgoing_flow.ipv4_stamp_flow(payload);
-                }
+			outgoing_flow.ipv4_stamp_flow(payload);
+                    }
+		}
             }
-        }
-    });
-    pipeline.compose()
+	})
+	.compose()
 }
 
 
