@@ -28,21 +28,21 @@ rm /tmp/rustup.sh
 echo "source $HOME/.cargo/env" >> $HOME/.bashrc
 ```
 
-### 2) Get container
+## 2) Get container
 You can either setup a builder VM using Vagrant and Virtualbox (1a) or setup your host (1b) to build NetBricks.
 
-#### 2a) Download from DockerHub
+### 2a) Download from DockerHub
 
 A recent build is available on DockerHub at [levaitamas/netbricks](https://hub.docker.com/r/levaitamas/netbricks).
 
-#### 2b) Build container
+### 2b) Build container
 
 Requires Docker to be installed.
 ```sh
 make docker
 ```
 
-### 3) Run NFs in container
+## 3) Run NFs in container
 
 Start container with `./run_nf.sh`.
 
