@@ -29,7 +29,7 @@ echo "source $HOME/.cargo/env" >> $HOME/.bashrc
 ```
 
 ## 2) Get container
-You can either setup a builder VM using Vagrant and Virtualbox (1a) or setup your host (1b) to build NetBricks.
+You can either pull the docker image from DockerHub (2a) or create it on your own (2b).
 
 ### 2a) Download from DockerHub
 
