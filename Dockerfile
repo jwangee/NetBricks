@@ -1,14 +1,15 @@
 FROM ch8728847/nf:base
 MAINTAINER "Tamas Levai <levait@tmit.bme.hu>"
 
-RUN apt-get -yq update && apt-get -yq install \
-    iputils-ping \
-    bash \
-    sudo \
-    libpcap0.8 \
-    libnuma1 \
-    libsctp1 \
-    && apt-get -yq clean
+RUN apt-get -yq update \
+    && apt-get -yq --no-install-recommends install \
+       iputils-ping \
+       bash \
+       sudo \
+       libpcap0.8 \
+       libnuma1 \
+       libsctp1 \
+    && apt-get -yq clean && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /app/target/release
 COPY ./target/release/acl-distribnat /app/target/release
