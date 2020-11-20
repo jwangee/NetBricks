@@ -16,4 +16,5 @@ target/release/
 !target/release/acl-distribnat
 !target/release/acl-urlfilter-chacha
 !target/release/vlanpop-acl
+!target/release/macswap
 tester/
