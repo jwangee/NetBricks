@@ -24,6 +24,7 @@
 #         test/macswap
 # )
 export examples=(
+    faas-nfv/macswap
     faas-nfv/vlanpop-acl
     faas-nfv/acl-urlfilter-chacha
     faas-nfv/acl-distribnat

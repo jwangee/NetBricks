@@ -53,6 +53,7 @@ In the container you can start NF chains by issuing:
 
 Supported NF chains are:
 
+* [macswap](faas-nfv/macswap)
 * [vlanpop-acl](faas-nfv/vlanpop-acl)
 * [acl-urlfilter-chacha](faas-nfv/acl-urlfilter-chacha)
 * [acl-distribnat](faas-nfv/acl-distribnat)
