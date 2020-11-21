@@ -1,7 +1,7 @@
 [package]
 name = "macswap"
 version = "0.1.0"
-authors = ["Steven H. Wang <wang.steven.h@gmail.com>"]
+authors = ["Tamas Levai <levait@tmit.bme.hu>"]
 
 [dependencies]
 e2d2 = { path = "../../framework", features = ["performance"] }

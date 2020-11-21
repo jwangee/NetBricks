@@ -432,6 +432,17 @@ version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "macswap"
+version = "0.1.0"
+dependencies = [
+ "e2d2 0.2.0",
+ "fnv 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "getopts 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "time 0.1.36 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "magenta"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
