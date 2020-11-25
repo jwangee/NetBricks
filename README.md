@@ -63,7 +63,7 @@ Supported NF chains are:
 
 In the container you can start benchmarks by issuing:
 ```sh
-/app/main run <benchmark> -n <nnumber_of_measurements>
+/app/main run <benchmark> -N <number_of_measurements>
 ```
 
 Supported benchmarks are:
