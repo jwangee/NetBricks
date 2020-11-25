@@ -1,4 +1,4 @@
-Container Building Process
+Container Building & Running Process
 --------
 
 ## 1) Create a build environment
