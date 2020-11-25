@@ -31,6 +31,7 @@ Vagrant.configure("2") do |config|
          libnuma-dev \
          libpcap-dev \
          libsctp-dev \
+         linux-image-generic \
          linux-headers-generic \
          build-essential \
          clang
@@ -61,14 +62,20 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "hugepages", type: "shell", privileged: false, inline: <<-SHELL
-    echo 'vm.nr_hugepages=1024' | sudo tee /etc/sysctl.d/hugepages.conf
+    echo 'vm.nr_hugepages=2048' | sudo tee /etc/sysctl.d/hugepages.conf
     sudo mount -t hugetlbfs none /dev/hugepages
-    sudo sysctl -w vm.nr_hugepages=1024
+    sudo sysctl -w vm.nr_hugepages=2048
   SHELL
 
   config.vm.provision "clean", type: "shell", privileged: false, inline: <<-SHELL
     sudo apt-get clean
     sudo apt-get update
   SHELL
+
+  config.vm.provision "reboot", type: "shell" do |shell|
+    shell.privileged = true
+    shell.inline = 'echo rebooting'
+    shell.reboot = true
+  end
 
 end
