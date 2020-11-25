@@ -28,4 +28,5 @@ export examples=(
     faas-nfv/vlanpop-acl
     faas-nfv/acl-urlfilter-chacha
     faas-nfv/acl-distribnat
+    faas-nfv/scheduler_benchmark
 )

@@ -1,0 +1,12 @@
+[package]
+name = "scheduler_benchmark"
+version = "0.1.0"
+authors = ["Tamas Levai <levait@tmit.bme.hu>"]
+
+[dependencies]
+e2d2 = { path = "../../framework", features = ["performance"] }
+getopts = "*"
+
+[features]
+default = []
+print = []

@@ -46,6 +46,7 @@ make docker
 
 Start container with `./run_nf.sh`.
 
+### 3a) NF Chains
 In the container you can start NF chains by issuing:
 ```sh
 /app/main run <chain> -c 0 -p <nic_pcie_addr>
@@ -58,6 +59,15 @@ Supported NF chains are:
 * [acl-urlfilter-chacha](faas-nfv/acl-urlfilter-chacha)
 * [acl-distribnat](faas-nfv/acl-distribnat)
 
+### 3b) Benchmarks
+
+In the container you can start benchmarks by issuing:
+```sh
+/app/main run <benchmark> -n <nnumber_of_measurements>
+```
+
+Supported benchmarks are:
+* [scheduler_benchmark](faas-nfv/scheduler_benchmark): Measures the StandaloneSceduler's scheduling overhead
 
 --------
 # UPSTREAM README:

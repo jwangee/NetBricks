@@ -17,4 +17,5 @@ target/release/
 !target/release/acl-urlfilter-chacha
 !target/release/vlanpop-acl
 !target/release/macswap
+!target/release/scheduler_benchmark
 tester/

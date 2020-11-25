@@ -16,6 +16,7 @@ COPY ./target/release/acl-distribnat /app/target/release
 COPY ./target/release/acl-urlfilter-chacha /app/target/release
 COPY ./target/release/vlanpop-acl /app/target/release
 COPY ./target/release/macswap /app/target/release
+COPY ./target/release/scheduler_benchmark /app/target/release
 
 COPY ./examples.sh /app/
 COPY ./build.sh /app
