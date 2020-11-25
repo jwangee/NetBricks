@@ -58,16 +58,17 @@ Supported NF chains are:
 * [vlanpop-acl](faas-nfv/vlanpop-acl)
 * [acl-urlfilter-chacha](faas-nfv/acl-urlfilter-chacha)
 * [acl-distribnat](faas-nfv/acl-distribnat)
+* [scheduler_benchmark](faas-nfv/scheduler_benchmark)
 
-### 3b) Benchmarks
+### 3b) (Micro)benchmarks
 
 In the container you can start benchmarks by issuing:
 ```sh
 /app/main run <benchmark> -N <number_of_measurements>
 ```
 
-Supported benchmarks are:
-* [scheduler_benchmark](faas-nfv/scheduler_benchmark): Measures the StandaloneSceduler's scheduling overhead
+Supported (micro)benchmarks are:
+* [scheduler_ubenchmark](faas-nfv/scheduler_ubenchmark): Measures the StandaloneSceduler's scheduling overhead
 
 --------
 # UPSTREAM README:

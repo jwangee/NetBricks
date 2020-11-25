@@ -29,4 +29,5 @@ export examples=(
     faas-nfv/acl-urlfilter-chacha
     faas-nfv/acl-distribnat
     faas-nfv/scheduler_benchmark
+    faas-nfv/scheduler_ubenchmark
 )

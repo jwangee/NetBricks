@@ -4,6 +4,7 @@ extern crate e2d2;
 extern crate fnv;
 extern crate getopts;
 extern crate rand;
+extern crate redis;
 extern crate time;
 use self::nf::*;
 use e2d2::allocators::CacheAligned;
@@ -21,7 +22,17 @@ mod nf;
 
 const CONVERSION_FACTOR: f64 = 1000000000.;
 
-fn test<S: Scheduler + Sized>(ports: Vec<CacheAligned<PortQueue>>, sched: &mut S) {
+#[derive(Clone,Default)]
+struct RedisConnectionInfo {
+    address: String,
+    password: String
+}
+
+fn test<S: Scheduler + Sized>(
+    ports: Vec<CacheAligned<PortQueue>>,
+    sched: &mut S,
+    redis_connection_info: &RedisConnectionInfo
+) {
     for port in &ports {
         println!(
             "Receiving port {} rxq {} txq {}",
@@ -58,9 +69,16 @@ fn test<S: Scheduler + Sized>(ports: Vec<CacheAligned<PortQueue>>, sched: &mut S
         }
     );
 
+    // Connect to redis
+    let client = redis::Client::open(format!("redis://{}", redis_connection_info.address).as_str())
+	.unwrap();
+    let con = client.get_connection().unwrap();
+    // TODO: handle redis auth
+
+
     let pipelines: Vec<_> = ports
         .iter()
-        .map(|port| acl_nat(ReceiveBatch::new(port.clone()), acls.clone()).send(port.clone()))
+        .map(|port| acl_nat(ReceiveBatch::new(port.clone()), acls.clone(), &con).send(port.clone()))
         .collect();
     println!("Running {} pipelines", pipelines.len());
     for pipeline in pipelines {
@@ -71,17 +89,39 @@ fn test<S: Scheduler + Sized>(ports: Vec<CacheAligned<PortQueue>>, sched: &mut S
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let opts = basic_opts();
+    let mut opts = basic_opts();
+    opts.optopt("ra", "redis_addr", "Redis address", "REDIS_ADDR");
+    opts.optopt("rpw", "redis_pw", "Redis password", "REDIS_PW");
+
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
         Err(f) => panic!(f.to_string()),
     };
     let configuration = read_matches(&matches, &opts);
 
+    let redis_addr: String = matches.
+	opt_str("redis_addr")
+	.unwrap_or_else(|| String::from("127.0.0.1"))
+	.parse()
+	.expect("Error in parsing Redis address");
+
+    let redis_pw: String = matches.
+	opt_str("redis_pw")
+	.unwrap_or_else(|| String::from(""))
+	.parse()
+	.expect("Error in parsing Redis password");
+
+    let redis_con_info = RedisConnectionInfo {
+	address: redis_addr,
+	password: redis_pw
+    };
+
     let mut config = initialize_system(&configuration).unwrap();
     config.start_schedulers();
 
-    config.add_pipeline_to_run(Arc::new(move |p, s: &mut StandaloneScheduler| test(p, s)));
+    config.add_pipeline_to_run(
+	Arc::new(move |p, s: &mut StandaloneScheduler| test(p, s, &redis_con_info))
+    );
     config.execute();
 
     let mut pkts_so_far = (0, 0);

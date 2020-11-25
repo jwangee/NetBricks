@@ -699,6 +699,15 @@ version = "0.1.0"
 dependencies = [
  "e2d2 0.2.0",
  "getopts 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "time 0.1.36 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "scheduler_ubenchmark"
+version = "0.1.0"
+dependencies = [
+ "e2d2 0.2.0",
+ "getopts 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

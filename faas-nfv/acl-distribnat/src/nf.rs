@@ -1,3 +1,4 @@
+use redis::Commands;
 use e2d2::headers::*;
 use e2d2::operators::*;
 use e2d2::utils::*;
@@ -32,20 +33,40 @@ struct FlowUsed {
 // https://docs.rs/redis/0.8.0/redis/index.html
 // https://github.com/jwangee/FaaS-Flow/blob/master/network_functions/test_dpdk/nf_container/modules/distributed_nat.cc
 
-// fn upload_rule() {
+const REDIS_KEY: &'static str = "NAT";
 
-// }
+fn upload_rule(con: &redis::Connection, field: &str, value: &str) -> redis::RedisResult<()> {
+    //     std::string field ("");
+    //   field += ToIpv4Address(endpoint.addr) + ":" +
+    //       std::to_string(endpoint.port.value());
 
-// fn remove_rule() {
+    // std::string value ("");
+    // value += ToIpv4Address(entry.endpoint.addr) + ":" +
+    //          std::to_string(entry.endpoint.port.value());
+    let _: () = try!(con.hset(REDIS_KEY, field, value));
+    Ok(())
+}
 
-// }
+fn remove_rule(con: &redis::Connection, field: &str) -> redis::RedisResult<()> {
+    let _: () = try!(con.hdel(REDIS_KEY, field));
+    Ok(())
+}
 
-// fn fetch_rule() {
+fn fetch_rule(con: &redis::Connection, field: &str) -> bool {
+    match con.hget(REDIS_KEY, field) {
+	Err(_) => return false,
+	Ok(v) => {
+	    let ip: u32 = v;
+	    // TODO: parse ip addr, add to nat
+	    return true
+	}
+    }
+}
 
-// }
-
-// fn rules_sync_global() {
-
+// fn rules_sync_global(con: &redis::Connection) -> redis::RedisResult<()> {
+//     let map: HashMap<String, String> = try!(con.hgetall(REDIS_KEY));
+//     // TODO: iterate result, parse entries, add them to nat
+//     Ok(())
 // }
 
 impl Acl {
@@ -67,7 +88,10 @@ impl Acl {
     }
 }
 
-pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<Acl>) -> CompositionBatch {
+pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(
+    parent: T,
+    acls: Vec<Acl>
+) -> CompositionBatch {
     let mut flow_cache = HashSet::<Flow, FnvHash>::with_hasher(Default::default());
     parent
         .parse::<MacHeader>()
@@ -98,6 +122,7 @@ pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<A
 pub fn nat<T: 'static + Batch<Header = NullHeader>>(
     parent: T,
     nat_ip: &Ipv4Addr,
+    redis_con: &redis::Connection
 ) -> CompositionBatch {
     let ip = u32::from(*nat_ip);
     let mut port_hash = HashMap::<Flow, Flow, FnvHash>::with_capacity_and_hasher(65536, Default::default());
@@ -141,8 +166,12 @@ pub fn nat<T: 'static + Batch<Header = NullHeader>>(
 }
 
 
-pub fn acl_nat<T: 'static + Batch<Header = NullHeader>>(parent: T, acls: Vec<Acl>) -> CompositionBatch {
+pub fn acl_nat<T: 'static + Batch<Header = NullHeader>>(
+    parent: T,
+    acls: Vec<Acl>,
+    redis_con: &redis::Connection
+) -> CompositionBatch {
     let mut pipeline = acl_match(parent, acls);
-    pipeline = nat(pipeline, &Ipv4Addr::new(10, 0, 0, 1));
+    pipeline = nat(pipeline, &Ipv4Addr::new(10, 0, 0, 1), redis_con);
     pipeline.compose()
 }

@@ -18,4 +18,5 @@ target/release/
 !target/release/vlanpop-acl
 !target/release/macswap
 !target/release/scheduler_benchmark
+!target/release/scheduler_ubenchmark
 tester/
