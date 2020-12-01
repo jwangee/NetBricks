@@ -115,6 +115,84 @@ version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "bpf1"
+version = "0.1.0"
+dependencies = [
+ "chacha 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "e2d2 0.2.0",
+ "fnv 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "getopts 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "time 0.1.36 (registry+https://github.com/rust-lang/crates.io-index)",
+ "twox-hash 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "bpf2"
+version = "0.1.0"
+dependencies = [
+ "chacha 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "e2d2 0.2.0",
+ "fnv 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "getopts 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "time 0.1.36 (registry+https://github.com/rust-lang/crates.io-index)",
+ "twox-hash 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "bpf3"
+version = "0.1.0"
+dependencies = [
+ "chacha 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "e2d2 0.2.0",
+ "fnv 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "getopts 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "time 0.1.36 (registry+https://github.com/rust-lang/crates.io-index)",
+ "twox-hash 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "bpf4"
+version = "0.1.0"
+dependencies = [
+ "chacha 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "e2d2 0.2.0",
+ "fnv 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "getopts 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "time 0.1.36 (registry+https://github.com/rust-lang/crates.io-index)",
+ "twox-hash 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "bpf5"
+version = "0.1.0"
+dependencies = [
+ "chacha 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "e2d2 0.2.0",
+ "fnv 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "getopts 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "time 0.1.36 (registry+https://github.com/rust-lang/crates.io-index)",
+ "twox-hash 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "bpf6"
+version = "0.1.0"
+dependencies = [
+ "chacha 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "e2d2 0.2.0",
+ "fnv 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "getopts 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "time 0.1.36 (registry+https://github.com/rust-lang/crates.io-index)",
+ "twox-hash 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "byteorder"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

@@ -19,4 +19,10 @@ target/release/
 !target/release/macswap
 !target/release/scheduler_benchmark
 !target/release/scheduler_ubenchmark
+!target/release/bpf1
+!target/release/bpf2
+!target/release/bpf3
+!target/release/bpf4
+!target/release/bpf5
+!target/release/bpf6
 tester/
