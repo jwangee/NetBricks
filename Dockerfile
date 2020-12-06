@@ -18,6 +18,12 @@ COPY ./target/release/vlanpop-acl /app/target/release
 COPY ./target/release/macswap /app/target/release
 COPY ./target/release/scheduler_benchmark /app/target/release
 COPY ./target/release/scheduler_ubenchmark /app/target/release
+COPY ./target/release/bpf1 /app/target/release
+COPY ./target/release/bpf2 /app/target/release
+COPY ./target/release/bpf3 /app/target/release
+COPY ./target/release/bpf4 /app/target/release
+COPY ./target/release/bpf5 /app/target/release
+COPY ./target/release/bpf6 /app/target/release
 
 COPY ./examples.sh /app/
 COPY ./build.sh /app
