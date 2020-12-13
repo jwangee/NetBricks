@@ -5,6 +5,10 @@ use fnv::FnvHasher;
 use std::collections::HashSet;
 use std::hash::BuildHasherDefault;
 use chacha::{ChaCha, KeyStream};
+use std::arch::x86_64::_rdtsc;
+
+static mut prev_ts: i64 = 0;
+static mut switch_overhead: i64 = 0;
 
 type FnvHash = BuildHasherDefault<FnvHasher>;
 
@@ -120,4 +124,12 @@ pub fn acl_urlfilter_chacha<T: 'static + Batch<Header = NullHeader>>(parent: T, 
     pipeline = urlfilter(pipeline, urlfilter_delay);
     pipeline = chacha(pipeline);
     pipeline.compose()
+}
+
+pub fn tag_ts() {
+    unsafe {
+        let now = _rdtsc();
+        switch_overhead = now - prev_ts;
+        prev_ts = now;
+    }
 }

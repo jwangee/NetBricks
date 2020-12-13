@@ -110,10 +110,13 @@ pub fn acl_match<T: 'static + Batch<Header = NullHeader>>(
                 }
                 let f = flow.unwrap();
                 if acl.matches(&f, &flow_cache) {
+                    return !acl.drop;
+                    /*
                     if !acl.drop {
                         flow_cache.insert(f);
                     }
                     return !acl.drop;
+                    */
                 }
             }
 	    // drop packet
