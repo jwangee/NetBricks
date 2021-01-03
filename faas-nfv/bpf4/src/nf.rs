@@ -1,12 +1,9 @@
-use redis::Commands;
 use e2d2::headers::*;
 use e2d2::operators::*;
 use e2d2::utils::*;
 use fnv::FnvHasher;
-use std::collections::{HashSet,HashMap};
-use std::convert::From;
+use std::collections::HashSet;
 use std::hash::BuildHasherDefault;
-use std::net::Ipv4Addr;
 
 type FnvHash = BuildHasherDefault<FnvHasher>;
 
@@ -21,56 +18,8 @@ pub struct Acl {
     pub drop: bool,
 }
 
-#[derive(Clone, Default)]
-struct Unit;
-#[derive(Clone, Copy, Default)]
-struct FlowUsed {
-    pub flow: Flow,
-    pub time: u64,
-    pub used: bool,
-}
-
-// https://docs.rs/redis/0.8.0/redis/index.html
-// https://github.com/jwangee/FaaS-Flow/blob/master/network_functions/test_dpdk/nf_container/modules/distributed_nat.cc
-
-const REDIS_KEY: &'static str = "NAT";
-
-fn upload_rule(con: &redis::Connection, field: &str, value: &str) -> redis::RedisResult<()> {
-    //     std::string field ("");
-    //   field += ToIpv4Address(endpoint.addr) + ":" +
-    //       std::to_string(endpoint.port.value());
-
-    // std::string value ("");
-    // value += ToIpv4Address(entry.endpoint.addr) + ":" +
-    //          std::to_string(entry.endpoint.port.value());
-    let _: () = try!(con.hset(REDIS_KEY, field, value));
-    Ok(())
-}
-
-fn remove_rule(con: &redis::Connection, field: &str) -> redis::RedisResult<()> {
-    let _: () = try!(con.hdel(REDIS_KEY, field));
-    Ok(())
-}
-
-fn fetch_rule(con: &redis::Connection, field: &str) -> bool {
-    match con.hget(REDIS_KEY, field) {
-	Err(_) => return false,
-	Ok(v) => {
-	    let ip: u32 = v;
-	    // TODO: parse ip addr, add to nat
-	    return true
-	}
-    }
-}
-
-// fn rules_sync_global(con: &redis::Connection) -> redis::RedisResult<()> {
-//     let map: HashMap<String, String> = try!(con.hgetall(REDIS_KEY));
-//     // TODO: iterate result, parse entries, add them to nat
-//     Ok(())
-// }
-
 impl Acl {
-    pub fn matches(&self, flow: &Flow, connections: &HashSet<Flow, FnvHash>) -> bool {
+    pub fn matches(&self, flow: &Flow, _connections: &HashSet<Flow, FnvHash>) -> bool {
         if (self.src_ip.unwrap().in_range(flow.src_ip))
             && (self.dst_ip.unwrap().in_range(flow.dst_ip))
             && (self.src_port.is_none() || flow.src_port == self.src_port.unwrap())

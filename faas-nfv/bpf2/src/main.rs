@@ -4,7 +4,6 @@ extern crate e2d2;
 extern crate fnv;
 extern crate getopts;
 extern crate rand;
-extern crate redis;
 extern crate time;
 use self::nf::*;
 use e2d2::allocators::CacheAligned;
@@ -21,12 +20,6 @@ use std::time::Duration;
 mod nf;
 
 const CONVERSION_FACTOR: f64 = 1000000000.;
-
-#[derive(Clone,Default)]
-struct RedisConnectionInfo {
-    address: String,
-    password: String
-}
 
 fn test<S: Scheduler + Sized>(
     ports: Vec<CacheAligned<PortQueue>>,

@@ -10,7 +10,6 @@ getopts = "*"
 rand = "0.3.15"
 fnv = "*"
 twox-hash = "*"
-redis = "=0.8.0"
 
 [features]
 default = []
